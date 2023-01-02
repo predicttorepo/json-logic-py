@@ -255,6 +255,8 @@ empty_operand_values_for_operators = {
 
 
 def jsonLogic(tests, data=None):
+    from .meta.expressions import destructure
+
     """Executes the json-logic with given data."""
     if isinstance(tests, list):
         return [jsonLogic(item, data) for item in tests]
@@ -265,8 +267,7 @@ def jsonLogic(tests, data=None):
 
     data = data or {}
 
-    operator = list(tests.keys())[0]
-    values = tests[operator]
+    operator, values = destructure(tests)
 
     # Easy syntax for unary operators, like {"var": "x"} instead of strict
     # {"var": ["x"]}

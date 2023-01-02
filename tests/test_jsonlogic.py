@@ -455,3 +455,12 @@ class JSONLogicTest(unittest.TestCase):
         rule = {"reduce": [{"var": "cars"}, {"+": [{"var": "accumulator"}, 1]}, 0]}
 
         self.assertEqual(2, jsonLogic(rule, data))
+
+    def test_underscore_meta_extension(self):
+        data = {"foo": "bar"}
+        rule = {
+            "_meta": {},
+            "var": "foo",
+        }
+
+        self.assertEqual(jsonLogic(rule, data), "bar")
