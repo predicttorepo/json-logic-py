@@ -64,4 +64,8 @@ class JSONLogicExpression:
         arguments = [
             JSONLogicExpression.from_expression(value).as_tree() for value in values
         ]
-        return Operation.for_operator(operator, arguments=arguments)
+        return Operation.for_operator(
+            operator,
+            arguments=arguments,
+            source_expression=self.expression,
+        )

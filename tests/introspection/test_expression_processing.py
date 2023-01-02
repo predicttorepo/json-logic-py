@@ -22,14 +22,18 @@ def test_expression_parser_simple_operation():
     expression = JSONLogicExpression.from_expression({"var": ["foo"]})
 
     assert expression.expression == {"var": ["foo"]}
-    assert expression.as_tree() == Var("var", ["foo"])
+    assert expression.as_tree() == Var(
+        "var", ["foo"], source_expression={"var": ["foo"]}
+    )
 
 
 def test_expression_parser_simple_operation_syntactic_sugar():
     expression = JSONLogicExpression.from_expression({"var": "foo"})
 
     assert expression.expression == {"var": ["foo"]}
-    assert expression.as_tree() == Var("var", ["foo"])
+    assert expression.as_tree() == Var(
+        "var", ["foo"], source_expression={"var": ["foo"]}
+    )
 
 
 def test_complex_expression_into_tree_with_representation():

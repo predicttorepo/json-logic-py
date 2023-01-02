@@ -28,6 +28,14 @@ class Operation:
 
     Evaluation happens depth-first in case an argument is an operation itself.
     """
+    source_expression: JSON = None
+    """
+    The original JSONLogic expression from which the operation was parsed.
+
+    This is only available as metadata and not guaranteed to be set unless you
+    obtain operations via :meth:`json_logic.meta.JSONLogicExpression.as_tree`. The
+    expression may be normalized already.
+    """
     _check_registered: bool = field(init=False, default=True)
 
     def __post_init__(self):
