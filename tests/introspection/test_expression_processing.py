@@ -27,6 +27,22 @@ def test_expression_parser_simple_operation():
     )
 
 
+def test_ignores_underscore_meta_extension():
+    """
+    Ensure logic expression parsing does not crash on _meta extension.
+
+    We support a private _meta extension
+    """
+    expression = JSONLogicExpression.from_expression(
+        {
+            "_meta": {},
+            "var": ["foo"],
+        }
+    )
+
+    assert expression.expression == {"var": ["foo"], "_meta": {}}
+
+
 def test_expression_parser_simple_operation_syntactic_sugar():
     expression = JSONLogicExpression.from_expression({"var": "foo"})
 

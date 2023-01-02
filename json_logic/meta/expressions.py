@@ -12,9 +12,9 @@ def destructure(expression: NormalizedExpression) -> tuple[str, list[JSON]]:
     """
     Decompose a normalized expression into the operator and arguments.
     """
-    # TODO: reliable way to read/extract the operator if we add extensions
-    # to expressions
-    operator = list(expression.keys())[0]
+    operator_keys = [key for key in expression.keys() if not key.startswith("_")]
+    assert len(operator_keys) == 1, "Logic expression must have only one operator"
+    operator = operator_keys[0]
     values = expression[operator]
     return (operator, values)
 
