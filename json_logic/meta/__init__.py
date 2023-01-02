@@ -2,7 +2,7 @@
 Meta module for json-logic.
 
 This module implements the tooling to convert between JSON and python datastructures
-for json-logic expressions. The Python datastructures provider richer introspection
+for json-logic expressions. The Python datastructures provide richer introspection
 potential to (statically) analyze JSON logic expressions.
 """
 from .base import Operation, register, unregister
