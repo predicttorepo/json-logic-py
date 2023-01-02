@@ -11,7 +11,7 @@ NormalizedExpression = dict[str, list[JSON]]
 OPERATION_MAP = {}
 
 
-@dataclass(repr=False)
+@dataclass(repr=False, slots=True)
 class Operation:
     operator: str
     """

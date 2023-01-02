@@ -1,10 +1,23 @@
+from typing import Protocol
+
 from .base import Operation, register
 
 
-@register("var")
-class Var(Operation):
-    _check_registered = False
+class OperationProtocol(Protocol):
+    _check_registered: bool
 
+    def __post_init__(self) -> None:  # pragma: no cover
+        ...
+
+
+class SkipRegistrationCheck(OperationProtocol):
+    def __post_init__(self):
+        self._check_registered = False
+        super().__post_init__()
+
+
+@register("var")
+class Var(SkipRegistrationCheck, Operation):
     def __repr__(self):
         return f"${self.arguments[0]}"
 
@@ -43,10 +56,10 @@ class If(Operation):
 
 
 @register("missing")
-class Missing(Operation):
-    _check_registered = False
+class Missing(SkipRegistrationCheck, Operation):
+    pass
 
 
 @register("missing_some")
-class MissingSome(Operation):
-    _check_registered = False
+class MissingSome(SkipRegistrationCheck, Operation):
+    pass
