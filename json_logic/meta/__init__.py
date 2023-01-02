@@ -7,6 +7,12 @@ potential to (statically) analyze JSON logic expressions.
 """
 from . import operations  # noqa
 from .base import Operation, register, unregister
-from .expressions import JSONLogicExpression
+from .expressions import JSONLogicExpression, JSONLogicExpressionTree
 
-__all__ = ["Operation", "JSONLogicExpression", "register", "unregister"]
+__all__ = [
+    "Operation",
+    "JSONLogicExpression",
+    "JSONLogicExpressionTree",
+    "register",
+    "unregister",
+]

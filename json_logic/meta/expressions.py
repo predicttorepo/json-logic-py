@@ -5,6 +5,7 @@ from ..typing import JSON, Primitive
 from .base import Operation
 
 NormalizedExpression = dict[str, list[JSON]]
+JSONLogicExpressionTree = Operation | Primitive | list
 
 
 def destructure(expression: NormalizedExpression) -> tuple[str, list[JSON]]:
@@ -48,7 +49,7 @@ class JSONLogicExpression:
         normalized = cls.normalize(expression)
         return cls(normalized)
 
-    def as_tree(self) -> Operation | Primitive | list:
+    def as_tree(self) -> JSONLogicExpressionTree:
         """
         Convert the JSON expression into a tree with Operation nodes.
         """
