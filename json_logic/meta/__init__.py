@@ -6,7 +6,7 @@ for json-logic expressions. The Python datastructures provide richer introspecti
 potential to (statically) analyze JSON logic expressions.
 """
 from . import operations  # noqa
-from .base import Operation, register, unregister
+from .base import Operation, register
 from .expressions import JSONLogicExpression, JSONLogicExpressionTree
 
 __all__ = [
@@ -14,5 +14,4 @@ __all__ = [
     "JSONLogicExpression",
     "JSONLogicExpressionTree",
     "register",
-    "unregister",
 ]

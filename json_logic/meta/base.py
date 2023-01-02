@@ -76,10 +76,3 @@ def register(operation: str):
         return cls
 
     return decorator
-
-
-def unregister(operation: str):
-    if operation not in OPERATION_MAP:
-        return
-
-    del OPERATION_MAP[operation]
