@@ -257,6 +257,7 @@ empty_operand_values_for_operators = {
     "max": [None],
     "count": [None],
     "date": [None, ""],
+    "datetime": [None, ""],
     "years": [None],
 }
 
