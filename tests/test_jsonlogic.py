@@ -121,6 +121,12 @@ class JSONLogicTest(unittest.TestCase):
                 }
             )
         )
+        self.assertIsNone(
+            jsonLogic(
+                {"datetime": {"var": "testDate"}},
+                {},
+            )
+        )
 
     def test_relative_delta_dates(self):
         self.assertEqual(
