@@ -121,8 +121,14 @@ class JSONLogicTest(unittest.TestCase):
                 }
             )
         )
+        self.assertIsNone(
+            jsonLogic(
+                {"datetime": {"var": "testDate"}},
+                {},
+            )
+        )
 
-    def test_relative_delta(self):
+    def test_relative_delta_dates(self):
         self.assertEqual(
             date(2003, 1, 1),
             jsonLogic({"-": [{"date": "2021-05-05"}, {"rdelta": [18, 4, 4]}]}),
@@ -147,6 +153,41 @@ class JSONLogicTest(unittest.TestCase):
         self.assertEqual(
             date(2021, 5, 5),
             jsonLogic({"+": [{"date": "2003-05-05"}, {"rdelta": [18]}]}),
+        )
+
+    def test_relative_delta_datetimes(self):
+        self.assertEqual(
+            datetime(2023, 12, 2, 11, 1, 1, tzinfo=timezone(timedelta(seconds=3600))),
+            jsonLogic(
+                {
+                    "+": [
+                        {"datetime": "2022-11-01T10:00:00.000+01:00"},
+                        {"rdelta": [1, 1, 1, 1, 1, 1]},
+                    ]
+                }
+            ),
+        )
+        self.assertEqual(
+            datetime(2023, 12, 2, 10, 0, 0, tzinfo=timezone(timedelta(seconds=3600))),
+            jsonLogic(
+                {
+                    "+": [
+                        {"datetime": "2022-11-01T10:00:00.000+01:00"},
+                        {"rdelta": [1, 1, 1]},
+                    ]
+                }
+            ),
+        )
+        self.assertEqual(
+            datetime(2022, 11, 1, 11, 1, 1, tzinfo=timezone(timedelta(seconds=3600))),
+            jsonLogic(
+                {
+                    "+": [
+                        {"datetime": "2022-11-01T10:00:00.000+01:00"},
+                        {"rdelta": [0, 0, 0, 1, 1, 1]},
+                    ]
+                }
+            ),
         )
 
     def test_missing(self):

@@ -49,8 +49,15 @@ def less(a, b, *args):
     return a < b and (not args or less(b, *args))
 
 
-def apply_relative_delta(year=0, month=0, day=0):
-    return relativedelta(years=year, months=month, days=day)
+def apply_relative_delta(year=0, month=0, day=0, hours=0, minutes=0, seconds=0):
+    return relativedelta(
+        years=year,
+        months=month,
+        days=day,
+        hours=hours,
+        minutes=minutes,
+        seconds=seconds,
+    )
 
 
 def less_or_equal(a, b, *args):
@@ -250,6 +257,7 @@ empty_operand_values_for_operators = {
     "max": [None],
     "count": [None],
     "date": [None, ""],
+    "datetime": [None, ""],
     "years": [None],
 }
 
