@@ -44,7 +44,7 @@ class Operation:
         ):
             raise ValueError(
                 f"Operator '{self.operator}' is unknown (unregistered in "
-                "'json_logic.operations' or in 'json_logic.scoped_operations')."
+                "'json_logic.operations' nor in 'json_logic.scoped_operations')."
             )
 
     def __repr__(self):
