@@ -3,11 +3,9 @@ import pytest
 from json_logic import jsonLogic
 
 
-@pytest.mark.unsupported_operators(["filter", "map", "all", "none", "some", "substr"])
+@pytest.mark.unsupported_operators(["filter", "all", "none", "some", "substr"])
 @pytest.mark.unsupported_logic(
     [
-        {"var": ""},
-        {"var": None},
         {"var": []},
     ]
 )
