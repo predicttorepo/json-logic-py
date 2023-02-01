@@ -19,6 +19,8 @@ class SkipRegistrationCheck(OperationProtocol):
 @register("var")
 class Var(SkipRegistrationCheck, Operation):
     def __repr__(self):
+        if self.arguments[0] == "" or self.arguments[0] is None:
+            return "$data"
         return f"${self.arguments[0]}"
 
 

@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Union
 
-from .. import operations
+from .. import operations, scoped_operations
 from ..typing import JSON, Primitive
 
 OperationArgument = Union[Primitive, "Operation"]
@@ -39,10 +39,12 @@ class Operation:
     _check_registered: bool = field(init=False, default=True)
 
     def __post_init__(self):
-        if self._check_registered and self.operator not in operations:
+        if self._check_registered and (
+            self.operator not in operations and self.operator not in scoped_operations
+        ):
             raise ValueError(
                 f"Operator '{self.operator}' is unknown (unregistered in "
-                "'json_logic.operations')."
+                "'json_logic.operations' or in 'json_logic.scoped_operations')."
             )
 
     def __repr__(self):
