@@ -170,7 +170,25 @@ def test_if_elif():
     assert repr(tree) == expected_repr
 
 
-@pytest.mark.unsupported_operators(["filter", "map", "all", "none", "some", "substr"])
+def test_map():
+    expr = {"map": [{"var": "integers"}, {"*": [{"var": ""}, 2]}]}
+
+    expression = JSONLogicExpression.from_expression(expr)
+    tree = expression.as_tree()
+
+    expected_repr = dedent(
+        """
+        Operation(map)
+          ├─ $integers
+          └─ Operation(*)
+               ├─ $data
+               └─ 2
+        """
+    ).strip()
+    assert repr(tree) == expected_repr
+
+
+@pytest.mark.unsupported_operators(["filter", "all", "none", "some", "substr"])
 def test_can_process_shared_tests(shared_test):
     expr, _, _ = shared_test
 

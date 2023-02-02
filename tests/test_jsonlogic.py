@@ -505,3 +505,9 @@ class JSONLogicTest(unittest.TestCase):
         }
 
         self.assertEqual(jsonLogic(rule, data), "bar")
+
+    def test_map(self):
+        data = {"integers": [1, 2, 3, 4, 5]}
+        rule = {"map": [{"var": "integers"}, {"*": [{"var": ""}, 2]}]}
+
+        self.assertEqual([2, 4, 6, 8, 10], jsonLogic(rule, data))

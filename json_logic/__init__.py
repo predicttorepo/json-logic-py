@@ -114,6 +114,9 @@ def merge(*args):
 
 def get_var(data, var_name, not_found=None):
     """Gets variable value from data dictionary."""
+    if var_name == "" or var_name is None:
+        return data  # Return the whole data object
+
     try:
         for key in str(var_name).split("."):
             try:
@@ -174,7 +177,7 @@ def missing_some(data, min_required, args):
     return ret
 
 
-def apply_reduce(iterable, scoped_logic, initializer):
+def apply_reduce(data, iterable_path, scoped_logic, initializer):
     """Calculate reduce
 
     If the data was
@@ -195,6 +198,7 @@ def apply_reduce(iterable, scoped_logic, initializer):
     initializer = 0
     ```
     """
+    iterable = jsonLogic(iterable_path, data)
     if not isinstance(iterable, list):
         return initializer
 
@@ -205,6 +209,11 @@ def apply_reduce(iterable, scoped_logic, initializer):
         iterable,
         initializer,
     )
+
+
+def apply_map(data, iterable_path, scoped_logic):
+    iterable = jsonLogic(iterable_path, data) or []
+    return list(map(lambda item: jsonLogic(scoped_logic, item), iterable))
 
 
 operations = {
@@ -238,7 +247,11 @@ operations = {
     "date": get_date,
     "datetime": get_datetime,
     "rdelta": apply_relative_delta,
+}
+
+scoped_operations = {
     "reduce": apply_reduce,
+    "map": apply_map,
 }
 
 # Which values to consider as "empty" for the operands of different operators
@@ -282,17 +295,19 @@ def jsonLogic(tests, data=None):
     if not isinstance(values, list) and not isinstance(values, tuple):
         values = [values]
 
+    if operator in scoped_operations:
+        return scoped_operations[operator](data, *values)
+
     # Recursion!
     values = [jsonLogic(val, data) for val in values]
 
-    if operator == "var":
-        return get_var(data, *values)
-    if operator == "missing":
-        return missing(data, *values)
-    if operator == "missing_some":
-        return missing_some(data, *values)
-    if operator == "reduce":
-        return apply_reduce(values[0], tests[operator][1], tests[operator][2])
+    match operator:
+        case "var":
+            return get_var(data, *values)
+        case "missing":
+            return missing(data, *values)
+        case "missing_some":
+            return missing_some(data, *values)
 
     if operator not in operations:
         raise ValueError("Unrecognized operation %s" % operator)
