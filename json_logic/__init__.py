@@ -116,7 +116,7 @@ def get_var(data, var_name, not_found=None):
     """Gets variable value from data dictionary."""
     if var_name == "" or var_name is None:
         return data  # Return the whole data object
-
+    
     try:
         for key in str(var_name).split("."):
             try:
@@ -134,7 +134,7 @@ def get_var(data, var_name, not_found=None):
 def get_date(value, *args):
     if isinstance(value, date):
         return value
-
+    
     try:
         return date.fromisoformat(value)
     except ValueError:
@@ -201,7 +201,7 @@ def apply_reduce(data, iterable_path, scoped_logic, initializer):
     iterable = jsonLogic(iterable_path, data)
     if not isinstance(iterable, list):
         return initializer
-
+    
     return reduce(
         lambda accumulator, current: jsonLogic(
             scoped_logic, {"accumulator": accumulator, "current": current}
@@ -217,90 +217,90 @@ def apply_map(data, iterable_path, scoped_logic):
 
 
 operations = {
-    "==": soft_equals,
-    "===": hard_equals,
-    "!=": lambda a, b: not soft_equals(a, b),
-    "!==": lambda a, b: not hard_equals(a, b),
-    ">": lambda a, b: less(b, a),
-    ">=": lambda a, b: less(b, a) or soft_equals(a, b),
-    "<": less,
-    "<=": less_or_equal,
-    "!": lambda a: not a,
-    "!!": bool,
-    "%": lambda a, b: a % b,
-    "and": lambda *args: reduce(lambda total, arg: total and arg, args, True),
-    "or": lambda *args: reduce(lambda total, arg: total or arg, args, False),
-    "?:": lambda a, b, c: b if a else c,
-    "if": if_,
-    "log": lambda a: logger.info(a) or a,
-    "in": lambda a, b: a in b if "__contains__" in dir(b) else False,
-    "cat": lambda *args: "".join(str(arg) for arg in args),
-    "+": plus,
-    "*": lambda *args: reduce(lambda total, arg: total * float(arg), args, 1),
-    "-": minus,
-    "/": lambda a, b=None: a if b is None else float(a) / float(b),
-    "min": lambda *args: min(args),
-    "max": lambda *args: max(args),
-    "merge": merge,
-    "count": lambda *args: sum(1 if a else 0 for a in args),
-    "today": lambda *args: date.today(),
-    "date": get_date,
+    "=="      : soft_equals,
+    "==="     : hard_equals,
+    "!="      : lambda a, b: not soft_equals(a, b),
+    "!=="     : lambda a, b: not hard_equals(a, b),
+    ">"       : lambda a, b: less(b, a),
+    ">="      : lambda a, b: less(b, a) or soft_equals(a, b),
+    "<"       : less,
+    "<="      : less_or_equal,
+    "!"       : lambda a: not a,
+    "!!"      : bool,
+    "%"       : lambda a, b: a % b,
+    "and"     : lambda *args: reduce(lambda total, arg: total and arg, args, True),
+    "or"      : lambda *args: reduce(lambda total, arg: total or arg, args, False),
+    "?:"      : lambda a, b, c: b if a else c,
+    "if"      : if_,
+    "log"     : lambda a: logger.info(a) or a,
+    "in"      : lambda a, b: a in b if "__contains__" in dir(b) else False,
+    "cat"     : lambda *args: "".join(str(arg) for arg in args),
+    "+"       : plus,
+    "*"       : lambda *args: reduce(lambda total, arg: total * float(arg), args, 1),
+    "-"       : minus,
+    "/"       : lambda a, b=None: a if b is None else float(a) / float(b),
+    "min"     : lambda *args: min(args),
+    "max"     : lambda *args: max(args),
+    "merge"   : merge,
+    "count"   : lambda *args: sum(1 if a else 0 for a in args),
+    "today"   : lambda *args: date.today(),
+    "date"    : get_date,
     "datetime": get_datetime,
-    "rdelta": apply_relative_delta,
+    "rdelta"  : apply_relative_delta,
 }
 
 scoped_operations = {
     "reduce": apply_reduce,
-    "map": apply_map,
+    "map"   : apply_map,
 }
 
 # Which values to consider as "empty" for the operands of different operators
 empty_operand_values_for_operators = {
-    ">": [None],
-    ">=": [None],
-    "<": [None],
-    "<=": [None],
-    "%": [None],
-    "log": [None],
-    "+": [None],
-    "*": [None],
-    "-": [None],
-    "/": [None],
-    "min": [None],
-    "max": [None],
-    "count": [None],
-    "date": [None, ""],
+    ">"       : [None],
+    ">="      : [None],
+    "<"       : [None],
+    "<="      : [None],
+    "%"       : [None],
+    "log"     : [None],
+    "+"       : [None],
+    "*"       : [None],
+    "-"       : [None],
+    "/"       : [None],
+    "min"     : [None],
+    "max"     : [None],
+    "count"   : [None],
+    "date"    : [None, ""],
     "datetime": [None, ""],
-    "years": [None],
+    "years"   : [None],
 }
 
 
 def jsonLogic(tests, data=None):
     from .meta.expressions import destructure
-
+    
     """Executes the json-logic with given data."""
     if isinstance(tests, list):
         return [jsonLogic(item, data) for item in tests]
-
+    
     # You've recursed to a primitive, stop!
     if tests is None or not isinstance(tests, dict):
         return tests
-
+    
     data = data or {}
-
+    
     operator, values = destructure(tests)
-
+    
     # Easy syntax for unary operators, like {"var": "x"} instead of strict
     # {"var": ["x"]}
     if not isinstance(values, list) and not isinstance(values, tuple):
         values = [values]
-
+    
     if operator in scoped_operations:
         return scoped_operations[operator](data, *values)
-
+    
     # Recursion!
     values = [jsonLogic(val, data) for val in values]
-
+    
     match operator:
         case "var":
             return get_var(data, *values)
@@ -308,13 +308,17 @@ def jsonLogic(tests, data=None):
             return missing(data, *values)
         case "missing_some":
             return missing_some(data, *values)
-
+    
     if operator not in operations:
         raise ValueError("Unrecognized operation %s" % operator)
-
+    
     # Some operators raise errors if operands are empty. However, when evaluating without data or with incomplete
     # data, often variables are empty. In this case, the jsonLogic evaluation will return None
     empty_values = empty_operand_values_for_operators.get(operator)
     if empty_values and any([value in empty_values for value in values]):
         return None
     return operations[operator](*values)
+
+
+def add_operator(name: str, function_):
+    operations[name] = function_
