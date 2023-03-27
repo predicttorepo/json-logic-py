@@ -1,6 +1,6 @@
 # This is a Python implementation of the following jsonLogic JS library:
 # https://github.com/jwadhams/json-logic-js
-
+import json
 import logging
 from datetime import date, datetime
 from functools import reduce
@@ -216,6 +216,33 @@ def apply_map(data, iterable_path, scoped_logic):
     return list(map(lambda item: jsonLogic(scoped_logic, item), iterable))
 
 
+def json_base(keys, values):
+    out = dict()
+    for i in range(len(keys)):
+        out[jsonLogic(keys[i])] = jsonLogic(values[i])
+    
+    return out
+
+
+def json_node_operator(keys, values):
+    return json.dumps(json_base(keys, values))
+
+
+def json_root_operator(keys, values):
+    def jsonfy(d):
+        for k, v in d.items():
+            try:
+                d[k] = json.loads(v)
+            except Exception:
+                pass
+            if isinstance(d[k], dict):
+                jsonfy(d[k])
+        return d
+    
+    json_data = json_base(keys, values)
+    return jsonfy(json_data)
+
+
 operations = {
     "=="      : soft_equals,
     "==="     : hard_equals,
@@ -247,6 +274,8 @@ operations = {
     "date"    : get_date,
     "datetime": get_datetime,
     "rdelta"  : apply_relative_delta,
+    "json_root": json_root_operator,
+    "json_node": json_node_operator,
 }
 
 scoped_operations = {
