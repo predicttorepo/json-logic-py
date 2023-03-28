@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "json_logic_transform_villegasjuan"
-version = "1.1.1"
+version = "1.1.2"
 authors = [
   { name="Juan Villegas", email="villegasjuan@yahoo.com" },
 ]

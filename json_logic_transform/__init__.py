@@ -218,7 +218,13 @@ def apply_map(data, iterable_path, scoped_logic):
 
 def apply_filter(data, iterable_path, scoped_logic):
     filtered_indexes = apply_map(data, iterable_path, scoped_logic)
-    values = list(data.values())[0]
+    if isinstance(data, list):
+        values = data
+    elif isinstance(data, dict):
+        values = list(data.values())[0]
+    else:
+        values = [None] * len(filtered_indexes)
+        
     return [values[i] for i in range(len(filtered_indexes)) if filtered_indexes[i]]
 
 
