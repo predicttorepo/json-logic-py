@@ -14,7 +14,7 @@ This package adds the add_operator method to add custom operators in python and 
 
 ### Simple
 ```python
-from json_logic import jsonLogic
+from json_logic_transform import jsonLogic
 jsonLogic( { "==" : [1, 1] } )
 # True
 ```
@@ -237,7 +237,9 @@ rule = {"reduce": [{"var": "cars"}, {"+": [{"var": "accumulator"}, 1]}, 0]}
 jsonLogic(rule, data)
 # 2
 ```
+## Other functions
 
+### Custom operators
 
 Example adding a custom operator 
 
@@ -251,6 +253,8 @@ jsonLogic({"split": ["a|b|c", "|", 1]})
 # 'b'
 
 ```
+
+### Transform or create json (json_root and json_node)
 
 Example with JSON transformations using json_root and json_node
 
