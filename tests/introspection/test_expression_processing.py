@@ -2,9 +2,9 @@ from textwrap import dedent
 
 import pytest
 
-from json_logic.meta import JSONLogicExpression, Operation
-from json_logic.meta.operations import Var
-from json_logic.typing import Primitive
+from json_logic_transform.meta import JSONLogicExpression, Operation
+from json_logic_transform.meta.operations import Var
+from json_logic_transform.typing import Primitive
 
 
 @pytest.mark.parametrize(

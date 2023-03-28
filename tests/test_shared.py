@@ -1,6 +1,6 @@
 import pytest
 
-from json_logic import jsonLogic
+from json_logic_transform import jsonLogic
 
 
 @pytest.mark.unsupported_operators(["filter", "all", "none", "some", "substr"])

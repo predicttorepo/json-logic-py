@@ -6,7 +6,7 @@ from datetime import date, datetime, timedelta, timezone
 
 from freezegun import freeze_time
 
-from json_logic import jsonLogic
+from json_logic_transform import jsonLogic
 
 
 class JSONLogicTest(unittest.TestCase):
@@ -486,6 +486,14 @@ class JSONLogicTest(unittest.TestCase):
 
         self.assertEqual(5000, jsonLogic(rule, data))
 
+    def test_apply_filter(self):
+        data = {"integers": [1, 2, 3, 4, 5]}
+        rule = {"filter": [{"var": "integers"},
+                           {"%": [{"var": ""}, 2]}
+                           ]}
+        result = jsonLogic(rule, data)
+        self.assertEqual([1, 3, 5], result)
+        
     def test_calculate_array_length(self):
         data = {
             "cars": [

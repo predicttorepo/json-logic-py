@@ -2,15 +2,15 @@
 Tests for jsonLogic.
 """
 import unittest
-from json_logic import jsonLogic, add_operator, operations
+from json_logic_transform import jsonLogic, add_operator, operations
 from math import factorial
 
 
 class JSONLogicTest(unittest.TestCase):
     def test_add_math_operator(self):
-        add_operator("!", factorial)
-        self.assertTrue("!" in operations)
-        self.assertEqual(24, jsonLogic({"!": [4]}))
+        add_operator("fact", factorial)
+        self.assertTrue("fact" in operations)
+        self.assertEqual(24, jsonLogic({"fact": [4]}))
     
     def test_add_str_operator(self):
         def split(string, sep, pos):

@@ -1,15 +1,14 @@
-# json-logic-py
+# json-logic-transform
 
 This parser accepts [JsonLogic](http://jsonlogic.com) rules and executes them in Python.
 
-This is a fork of [json-logic-py](https://github.com/nadirizr/json-logic-py>) by 
-[nadir.izr](https://github.com/nadirizr), which is a Python porting of the
-GitHub project by [jwadhams](https://github.com/jwadhams>) for JavaScript:
-[json-logic-js](https://github.com/jwadhams/json-logic-js>).
+This is a fork of [maykin-json-logic-py](https://pypi.org/project/maykin-json-logic-py/) by 
+[Maykin Media](https://pypi.org/user/maykinmedia/).
 
 The JsonLogic format is designed to allow you to share rules (logic) between front-end and back-end code (regardless of language difference), even to store logic along with a record in a database.  JsonLogic is documented extensively at [JsonLogic.com](http://jsonlogic.com), including examples of every [supported operation](http://jsonlogic.com/operations.html) and a place to [try out rules in your browser](http://jsonlogic.com/play.html).
 
-The same format can also be executed in PHP by the library [json-logic-php](https://github.com/jwadhams/json-logic-php/)
+This package adds the add_operator method to add custom operators in python and the 'json_root' and 'json_node' operators that allows to make json transformations using json-logic
+
 
 ## Examples
 
@@ -239,12 +238,40 @@ jsonLogic(rule, data)
 # 2
 ```
 
+
+Example adding a custom operator 
+
+```python
+
+def split_operator(string, sep, pos):
+    return string.split(sep)[pos]
+
+add_operator('split', split_operator)
+jsonLogic({"split": ["a|b|c", "|", 1]})
+# 'b'
+
+```
+
+Example with JSON transformations using json_root and json_node
+
+```python
+jsonLogic({'json_root': [['k1', 'k2', 'k3'], 
+                         [1, 2, {'json_node': 
+                                 [['k31'], [31]]
+                                 }]
+                         ]})
+# {'k1': 1, 'k2': 2, 'k3': { 'k31': 31 }}
+
+```
+json_node supports nesting more json_nodes
+
+
 ## Installation
 
 The best way to install this library is via [PIP](https://pypi.python.org/pypi/):
 
 ```bash
-pip install json-logic
+pip install json-logic-transform
 ```
 
 If that doesn't suit you, and you want to manage updates yourself, the entire library is self-contained in `json_logic.py` and you can download it straight into your project as you see fit.

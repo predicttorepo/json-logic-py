@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0", "python-dateutil~=2.8.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "json_logic_transform_villegasjuan"
+version = "1.0.0"
+authors = [
+  { name="Juan Villegas", email="villegasjuan@yahoo.com" },
+]
+description = "Json Logic with json transforming magic"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/predicttorepo/json-logic-py"
+"Bug Tracker" = "https://github.com/predicttorepo/json-logic-py/issues"

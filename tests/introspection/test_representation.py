@@ -2,8 +2,8 @@ from textwrap import dedent
 
 import pytest
 
-from json_logic.meta import Operation
-from json_logic.meta.operations import Var
+from json_logic_transform.meta import Operation
+from json_logic_transform.meta.operations import Var
 
 
 def test_representation_simple_operation():
