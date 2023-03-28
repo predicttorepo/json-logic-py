@@ -425,6 +425,9 @@ class JSONLogicTest(unittest.TestCase):
             ),
             "I love apple pie",
         )
+        
+    def test_substr(self):
+        self.assertEqual("love", jsonLogic({"substr": ["I love apple pie", 2, 6]}))
 
     def test_log(self):
         """
@@ -493,7 +496,31 @@ class JSONLogicTest(unittest.TestCase):
                            ]}
         result = jsonLogic(rule, data)
         self.assertEqual([1, 3, 5], result)
+    
+    def test_apply_all(self):
+        data = {"integers": [1, 3, 5]}
+        rule = {"all": [{"var": "integers"},
+                           {"%": [{"var": ""}, 2]}
+                           ]}
+        result = jsonLogic(rule, data)
+        self.assertTrue(result)
         
+    def test_apply_some(self):
+        data = {"integers": [2, 3, 4]}
+        rule = {"some": [{"var": "integers"},
+                           {"%": [{"var": ""}, 2]}
+                           ]}
+        result = jsonLogic(rule, data)
+        self.assertTrue(result)
+        
+    def test_apply_none(self):
+        data = {"integers": [2, 4, 6]}
+        rule = {"none": [{"var": "integers"},
+                           {"%": [{"var": ""}, 2]}
+                           ]}
+        result = jsonLogic(rule, data)
+        self.assertTrue(result)
+
     def test_calculate_array_length(self):
         data = {
             "cars": [

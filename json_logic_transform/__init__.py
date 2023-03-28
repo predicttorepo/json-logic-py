@@ -219,7 +219,22 @@ def apply_map(data, iterable_path, scoped_logic):
 def apply_filter(data, iterable_path, scoped_logic):
     filtered_indexes = apply_map(data, iterable_path, scoped_logic)
     values = list(data.values())[0]
-    return [values[i] for i in range(len(filtered_indexes)) if filtered_indexes[i] == 1]
+    return [values[i] for i in range(len(filtered_indexes)) if filtered_indexes[i]]
+
+
+def apply_all(data, iterable_path, scoped_logic):
+    filtered_indexes = apply_map(data, iterable_path, scoped_logic)
+    return all(filtered_indexes)
+
+
+def apply_some(data, iterable_path, scoped_logic):
+    filtered_indexes = apply_map(data, iterable_path, scoped_logic)
+    return any(filtered_indexes)
+
+
+def apply_none(data, iterable_path, scoped_logic):
+    filtered_indexes = apply_map(data, iterable_path, scoped_logic)
+    return not any(filtered_indexes)
 
 
 def json_base(keys, values):
@@ -268,6 +283,7 @@ operations = {
     "log"      : lambda a: logger.info(a) or a,
     "in"       : lambda a, b: a in b if "__contains__" in dir(b) else False,
     "cat"      : lambda *args: "".join(str(arg) for arg in args),
+    "substr"   : lambda a, b, c: a[b:c],
     "+"        : plus,
     "*"        : lambda *args: reduce(lambda total, arg: total * float(arg), args, 1),
     "-"        : minus,
@@ -288,6 +304,9 @@ scoped_operations = {
     "reduce": apply_reduce,
     "map"   : apply_map,
     "filter": apply_filter,
+    "all": apply_all,
+    "some": apply_some,
+    "none": apply_none
 }
 
 # Which values to consider as "empty" for the operands of different operators
