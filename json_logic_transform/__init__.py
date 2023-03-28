@@ -258,6 +258,15 @@ def json_root_operator(keys, values):
                 pass
             if isinstance(d[k], dict):
                 jsonfy(d[k])
+            elif isinstance(d[k], list):
+                d_ = list()
+                for v in d[k]:
+                    try:
+                       v = json.loads(v)
+                    except Exception:
+                        pass
+                    d_.append(jsonfy(v))
+                d[k] = d_
         return d
     
     json_data = json_base(keys, values)
